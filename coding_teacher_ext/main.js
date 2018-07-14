@@ -8,7 +8,7 @@ define([
     function load_ipython_extension() {
 
         var handler = function () {
-            alert('this is an alert from coding teacher extension!');
+            alert('this is an alert from coding teacher extension! ver 2');
         };
 
         var action = {
