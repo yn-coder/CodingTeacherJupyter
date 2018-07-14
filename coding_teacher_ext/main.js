@@ -20,7 +20,7 @@ define([
 
         var action = {
             icon: 'fa-comment-o', // a font-awesome class used on buttons, etc
-            help    : 'Show an alert',
+            help    : 'On-line help',
             help_index : 'zz',
             handler : handler
         };
