@@ -1,3 +1,5 @@
+#!/bin/bash
+
 git pull
 
 jupyter nbextension install coding_teacher_ext --user
