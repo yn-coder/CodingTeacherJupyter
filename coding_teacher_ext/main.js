@@ -7,8 +7,15 @@ define([
 ) {
     function load_ipython_extension() {
 
-        var handler = function () {
-            alert('this is an alert from coding teacher extension! ver 2');
+        var handler = function () {            
+            var answer = confirm ("This is an on-line help for Coding Teacher Jupyter extension. To open the help in the new window - click OK.")
+            if (answer)
+                window.open(
+                    'https://codingteacher.herokuapp.com/help/',
+                    '_blank' // <- This is what makes it open in a new window.
+                );
+
+
         };
 
         var action = {
