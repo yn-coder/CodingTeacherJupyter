@@ -47,7 +47,8 @@ define([
     var default_metadata = {
         id: '',
         data: {
-            description: Jupyter.notebook.notebook_path,
+            file_name: Jupyter.notebook.notebook_path,
+            description: 'I have a question',
             public: false
         }
     };
@@ -107,7 +108,7 @@ define([
         );
 
         var d = new Date();
-        var msg_head = d.toLocaleString() + ': Gist ';
+        var msg_head = d.toLocaleString() + ': Sent ';
         //var msg_tail = response.history.length === 1 ? ' published' : ' updated to revision ' + response.history.length;
         var alert = build_alert('alert-success')
             .hide()
@@ -238,6 +239,9 @@ define([
             .prop('checked', is_public)
             .prop('readonly', !have_auth);
 
+        gist_editor.find('#gist_file_name')
+            .val(Jupyter.notebook.metadata.gist.data.file_name);
+
         gist_editor.find('#gist_description')
             .val(Jupyter.notebook.metadata.gist.data.description);
 
@@ -299,7 +303,7 @@ define([
                 $('<span/>')
                     .addClass('help-block')
             );
-        $('<div/>')
+        /*$('<div/>')
             .appendTo(controls)
             .append(
                 $('<div/>')
@@ -320,7 +324,7 @@ define([
                 $('<label/>')
                     .attr('for', 'gist_public')
                     .text('public')
-            );
+            );*/
         $('<div/>')
             .appendTo(controls)
             .append(
@@ -335,6 +339,23 @@ define([
                     .attr('type', 'textarea')
                     .val(Jupyter.notebook.metadata.gist.data.description)
             );
+
+        $('<div/>')
+            .appendTo(controls)
+            .append(
+                $('<label/>')
+                    .attr('for', 'gist_file_name')
+                    .text('file_name')
+            )
+            .append(
+                $('<input/>')
+                    .addClass('form-control')
+                    .attr('id', 'gist_file_name')
+                    .attr('type', 'textarea')
+                    .val(Jupyter.notebook.metadata.gist.data.file_name)
+                    .prop('readonly', true)
+            );
+
 
         var form_groups = controls.children('div').addClass('form-group');
         form_groups
@@ -383,8 +404,9 @@ define([
                     click: function() {
                         modal.find('.btn').prop('disabled', true);
                         var new_data = {
-                            public: $('#gist_public').prop('checked'),
-                            description: $('#gist_description').val()
+                            //public: $('#gist_public').prop('checked'),
+                            description: $('#gist_description').val(),
+                            file_name: $('#gist_file_name').val()
                         };
                         $.extend(
                             true,
@@ -422,6 +444,7 @@ define([
     var make_gist = function make_gist (complete_callback) {
         ensure_default_metadata();
 
+
         var data = $.extend(
             true, // deep-copy
             { files: {} }, // defaults
@@ -442,7 +465,7 @@ define([
             url: 'http://127.0.0.1:5000/help/post_new_q/',
             type: method,
             dataType: 'json',
-            data: JSON.stringify(data),
+            data: data,//JSON.stringify(data),
             beforeSend: add_auth_token,
             success: gist_success,
             error: gist_error,
