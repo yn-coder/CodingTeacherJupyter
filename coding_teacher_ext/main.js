@@ -108,7 +108,7 @@ define([
         );
 
         var d = new Date();
-        var msg_head = d.toLocaleString() + ': Sent ';
+        var msg_head = d.toLocaleString() + ': Sent <br>You can view your qustions here: <a href="https://codingteacher.herokuapp.com/help/q/">Questions</a>';
         //var msg_tail = response.history.length === 1 ? ' published' : ' updated to revision ' + response.history.length;
         var alert = build_alert('alert-success')
             .hide()
@@ -461,8 +461,8 @@ define([
 
         // Create/edit the Gist
         $.ajax({
-            //url: 'https://api.github.com/gists' + (id ? '/' + id : ''),
-            url: 'http://127.0.0.1:5000/help/post_new_q/',
+            //url: 'http://127.0.0.1:5000/help/post_new_q/',
+            url: 'https://codingteacher.herokuapp.com/help/post_new_q/',
             type: method,
             dataType: 'json',
             data: data,//JSON.stringify(data),
