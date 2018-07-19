@@ -273,6 +273,8 @@ define([
                 .text('This is on-line help for Virtual Teacher')
         )
         .append( '<p>Visit <a href="https://codingteacher.herokuapp.com/help/" target="_blank">Virtual Teacher Help Center</a>!</p>' )
+        .append( '<strong>Related resources from our Virtual Teacher site:</strong>' )
+        .append( $('<p/>').load( 'https://codingteacher.herokuapp.com/help/resource/' ) )
         .append( '<p>Or send your actual situation to us!</p>' )
 
         $('<div/>')
