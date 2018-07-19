@@ -406,7 +406,8 @@ define([
                         var new_data = {
                             //public: $('#gist_public').prop('checked'),
                             description: $('#gist_description').val(),
-                            file_name: $('#gist_file_name').val()
+                            file_name: $('#gist_file_name').val(),
+                            file_url: window.location.href
                         };
                         $.extend(
                             true,
