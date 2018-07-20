@@ -6,6 +6,10 @@
  *
  */
 
+// Coding teacher host - with trail /
+ct_host = 'http://127.0.0.1:5000/';
+//ct_host = 'https://codingteacher.herokuapp.com/';
+
 define([
     'jquery',
     'base/js/namespace',
@@ -86,7 +90,7 @@ define([
         var alert = build_alert('alert-danger')
             .hide()
             .append(
-                $('<p/>').text('The ajax request to Github went wrong:')
+                $('<p/>').text('The ajax request to Virtual Teacher site went wrong:')
             )
             .append(
                 $('<pre/>').text(jqXHR.responseJSON ? JSON.stringify(jqXHR.responseJSON, null, 2) : errorThrown)
@@ -108,7 +112,7 @@ define([
         );
 
         var d = new Date();
-        var msg_head = d.toLocaleString() + ': Sent <br>You can view your qustions here: <a href="https://codingteacher.herokuapp.com/help/q/">Questions</a>';
+        var msg_head = d.toLocaleString() + ': Sent <br>You can view your qustions here: <a href="' + ct_host + 'help/q/" target="_blank">Questions</a>';
         //var msg_tail = response.history.length === 1 ? ' published' : ' updated to revision ' + response.history.length;
         var alert = build_alert('alert-success')
             .hide()
@@ -272,9 +276,9 @@ define([
             $('<p/>')
                 .text('This is on-line help for Virtual Teacher')
         )
-        .append( '<p>Visit <a href="https://codingteacher.herokuapp.com/help/" target="_blank">Virtual Teacher Help Center</a>!</p>' )
+        .append( '<p>Visit <a href="' + ct_host + 'help/" target="_blank">Virtual Teacher Help Center</a>!</p>' )
         .append( '<strong>Related resources from our Virtual Teacher site:</strong>' )
-        .append( $('<p/>').load( 'https://codingteacher.herokuapp.com/help/resource/first.ipynb' ) )
+        .append( $('<p/>').load( ct_host + 'help/resource/first.ipynb' ) )
         .append( '<p>Or send your actual situation to us!</p>' )
 
         $('<div/>')
@@ -464,8 +468,7 @@ define([
 
         // Create/edit the Gist
         $.ajax({
-            //url: 'http://127.0.0.1:5000/help/post_new_q/',
-            url: 'https://codingteacher.herokuapp.com/help/post_new_q/',
+            url: ct_host + 'help/post_new_q/',
             type: method,
             dataType: 'json',
             data: data,//JSON.stringify(data),
