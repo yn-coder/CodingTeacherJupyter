@@ -6,6 +6,7 @@ define([
     'base/js/utils',
     'notebook/js/cell',
     'notebook/js/textcell',
+    'notebook/js/codecell',
     'codemirror/lib/codemirror',
 ], function (
     $,
@@ -15,6 +16,7 @@ define([
     utils,
     cell_mod,
     textcell,
+    codecell,
     CodeMirror
 ) {
     "use strict";
@@ -44,10 +46,10 @@ define([
      *  event, or altering classes on elements
      */
     var previewMdCell = function(cell) {
-        console.warn( 'previewMdCell' );
+        //console.warn( 'previewMdCell' );
         var cached_trigger = cell.events.trigger;
         cell.events.trigger = function (eventType) {
-            console.warn( eventType );
+            //console.warn( eventType );
             if (eventType !== "rendered.MarkdownCell") {
                 return cached_trigger.apply(this, arguments);
             }
@@ -65,9 +67,27 @@ define([
 
             //console.warn( cell.get_text());
             //cell.render();
-            cell.set_rendered(
-             '<h1>This is a on-line in-cell help for Virtual Teacher</h1><p>Please ask your <a href="#">questions</a> about this cell.</p>'
-            + '<pre>' + cell.get_text() + '</pre>' );
+            
+            var output_text = '<h1>This is a on-line in-cell help for Virtual Teacher</h1><p>Please ask your <a href="#">questions</a> about this cell.</p>';
+            
+            //+ '<pre>' + cell.get_text() + '</pre>';            
+
+            var str = cell.get_text();
+            var code_tag_open = 'code{';
+            var code_tag_close = '}';
+            var index_start = str.indexOf(code_tag_open, 0);
+            var res = '';
+
+            if (index_start !== -1){
+              index_start=index_start + code_tag_open.length;
+              var index_end = str.indexOf( code_tag_close, index_start);
+              if (index_end !== -1){
+                res = str.substring( index_start, index_end );
+                output_text = output_text + ' <br><hr> <a href="' + res + '">' +  res + '</a>';
+              };
+            };
+            console.warn( output_text );
+            cell.set_rendered( output_text );
             cell.typeset();
             cell.events.trigger("rendered.MarkdownCell", {cell: cell});
         }
@@ -78,9 +98,12 @@ define([
     };
 
     LiveMdPreviewer.prototype.registerCell = function(cell) {
-        if (!(cell instanceof textcell.TextCell)) {
+
+        if ( !(cell instanceof textcell.TextCell) && !(cell instanceof codecell.CodeCell) ){
             return;
-        }
+        };
+
+
         var timeout = this.timeout;
         cell.code_mirror.on('changes', function onCodeMirrorChanges (cm, changes) {
             if (!cm.state.livemdpreview) {
@@ -94,7 +117,7 @@ define([
         });
         // codemirror.net/doc/manual.html#events
         cell.code_mirror.on('focus', function onCodeMirrorFocus (cm, changes) {
-            console.warn('code mirror is focused');
+            //console.warn('code mirror is focused');
             if (!cm.state.livemdpreview) {
                 cm.state.livemdpreview = setTimeout(function () {
                     var cell = $(cm.getWrapperElement()).closest('.cell').data('cell');
@@ -105,7 +128,7 @@ define([
             }
         });
         cell.code_mirror.on('refresh', function onCodeMirrorRefrsh(cm, changes) {
-            console.warn('code mirror is refresh');
+            //console.warn('code mirror is refresh');
             if (!cm.state.livemdpreview) {
                 cm.state.livemdpreview = setTimeout(function () {
                     var cell = $(cm.getWrapperElement()).closest('.cell').data('cell');
