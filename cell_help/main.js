@@ -62,10 +62,10 @@ define([
 
         try {
             //cell.set_text('1      00');
-            
+
             //console.warn( cell.get_text());
             //cell.render();
-            cell.set_rendered( 
+            cell.set_rendered(
              '<h1>This is a on-line in-cell help for Virtual Teacher</h1><p>Please ask your <a href="#">questions</a> about this cell.</p>'
             + '<pre>' + cell.get_text() + '</pre>' );
             cell.typeset();
@@ -86,7 +86,7 @@ define([
             if (!cm.state.livemdpreview) {
                 cm.state.livemdpreview = setTimeout(function () {
                     var cell = $(cm.getWrapperElement()).closest('.cell').data('cell');
-                    
+
                     previewMdCell(cell);
                     delete cm.state.livemdpreview;
                 }, timeout);
@@ -94,17 +94,28 @@ define([
         });
         // codemirror.net/doc/manual.html#events
         cell.code_mirror.on('focus', function onCodeMirrorFocus (cm, changes) {
-            console.warn('code mirror is focused');    
+            console.warn('code mirror is focused');
             if (!cm.state.livemdpreview) {
                 cm.state.livemdpreview = setTimeout(function () {
                     var cell = $(cm.getWrapperElement()).closest('.cell').data('cell');
-                    
+
                     previewMdCell(cell);
                     delete cm.state.livemdpreview;
                 }, timeout);
             }
-        });        
-        
+        });
+        cell.code_mirror.on('refresh', function onCodeMirrorRefrsh(cm, changes) {
+            console.warn('code mirror is refresh');
+            if (!cm.state.livemdpreview) {
+                cm.state.livemdpreview = setTimeout(function () {
+                    var cell = $(cm.getWrapperElement()).closest('.cell').data('cell');
+
+                    previewMdCell(cell);
+                    delete cm.state.livemdpreview;
+                }, timeout);
+            }
+         });
+
     };
 
     LiveMdPreviewer.prototype.addCSS = function () {
