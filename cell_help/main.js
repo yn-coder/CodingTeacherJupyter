@@ -1,3 +1,7 @@
+// Coding teacher host - with trail /
+ct_host = 'http://127.0.0.1:5000/';
+//ct_host = 'https://codingteacher.herokuapp.com/';
+
 define([
     'jquery',
     'require',
@@ -46,10 +50,8 @@ define([
      *  event, or altering classes on elements
      */
     var previewMdCell = function(cell) {
-        //console.warn( 'previewMdCell' );
         var cached_trigger = cell.events.trigger;
         cell.events.trigger = function (eventType) {
-            //console.warn( eventType );
             if (eventType !== "rendered.MarkdownCell") {
                 return cached_trigger.apply(this, arguments);
             }
@@ -63,30 +65,34 @@ define([
         };
 
         try {
-            //cell.set_text('1      00');
-
-            //console.warn( cell.get_text());
-            //cell.render();
-            
-            var output_text = '<h1>This is a on-line in-cell help for Virtual Teacher</h1><p>Please ask your <a href="#">questions</a> about this cell.</p>';
-            
-            //+ '<pre>' + cell.get_text() + '</pre>';            
+            var page_name = Jupyter.notebook.notebook_path;
+            var output_text = '<h1>This is a on-line in-cell help for Virtual Teacher</h1><p>Please see the related resources about this book ' + page_name + ' and current cell.</p>';
 
             var str = cell.get_text();
-            var code_tag_open = 'code{';
+            var code_tag_open = 'cell_code{';
             var code_tag_close = '}';
             var index_start = str.indexOf(code_tag_open, 0);
-            var res = '';
+            var cell_code = '';
 
             if (index_start !== -1){
               index_start=index_start + code_tag_open.length;
               var index_end = str.indexOf( code_tag_close, index_start);
               if (index_end !== -1){
-                res = str.substring( index_start, index_end );
-                output_text = output_text + ' <br><hr> <a href="' + res + '">' +  res + '</a>';
+                cell_code = str.substring( index_start, index_end );
               };
             };
-            console.warn( output_text );
+            var res_url = ct_host + 'help/resource/' + page_name;
+            if (cell_code !== '') {
+              res_url = res_url + '?cell_code=' + cell_code;
+            };
+
+            var o = $('<div/>').load( res_url, function(responce, status, xhr) {
+                output_text = output_text + responce;
+
+                cell.set_rendered( output_text );
+                cell.typeset();
+                cell.events.trigger("rendered.MarkdownCell", {cell: cell});
+            } );
             cell.set_rendered( output_text );
             cell.typeset();
             cell.events.trigger("rendered.MarkdownCell", {cell: cell});
@@ -117,7 +123,7 @@ define([
         });
         // codemirror.net/doc/manual.html#events
         cell.code_mirror.on('focus', function onCodeMirrorFocus (cm, changes) {
-            //console.warn('code mirror is focused');
+
             if (!cm.state.livemdpreview) {
                 cm.state.livemdpreview = setTimeout(function () {
                     var cell = $(cm.getWrapperElement()).closest('.cell').data('cell');
@@ -127,8 +133,9 @@ define([
                 }, timeout);
             }
         });
+
         cell.code_mirror.on('refresh', function onCodeMirrorRefrsh(cm, changes) {
-            //console.warn('code mirror is refresh');
+
             if (!cm.state.livemdpreview) {
                 cm.state.livemdpreview = setTimeout(function () {
                     var cell = $(cm.getWrapperElement()).closest('.cell').data('cell');
