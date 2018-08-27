@@ -61,7 +61,7 @@ define([
             $(IPython.toolbar.add_buttons_group([
                 IPython.keyboard_manager.actions.register({
                     help   : 'Show Virtual Teacher',
-                    icon   : 'fa-archive',
+                    icon   : 'fa-book',
                     handler: function() {
                         var visible = toggleHelpPanel();
                         var btn = $(this);
@@ -204,16 +204,9 @@ define([
             // get quickhelp to show shortcuts
 
             var page_name = Jupyter.notebook.notebook_path;
-            
-            side_panel_inner
 
-            .append(
-                $('<h1/>')
-                    .text('This is on-line help for Virtual Teacher')
-            )
-            .append( '<p>Visit <a href="' + ct_host + 'help/" target="_blank">Virtual Teacher Help Center</a>!</p>' )
-            .append( '<strong>Related resources from our Virtual Teacher site:</strong> about <i>' + page_name + '</i>' )
-            .append( $('<p/>').load( ct_host + 'help/resource/' + page_name ) );
+            side_panel_inner
+              .append( $('<p/>').load( ct_host + 'help/resource/' + page_name ) );
 
             // attach handler for qh showing shortcuts
             var qh_dia = $(qh.shortcut_dialog);
