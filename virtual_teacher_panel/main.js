@@ -206,7 +206,8 @@ define([
             var page_name = Jupyter.notebook.notebook_path;
 
             side_panel_inner
-              .append( $('<p/>').load( ct_host + 'help/resource/' + page_name ) );
+              .append( $('<p/>').load( ct_host + 'help/resource/' + page_name ) )
+			  .append( '<iframe allow="microphone;" width="350" height="430" src="https://console.dialogflow.com/api-client/demo/embedded/7ef6f385-f92e-455d-9896-45f99c4c08a4"></iframe>' );
 
             // attach handler for qh showing shortcuts
             var qh_dia = $(qh.shortcut_dialog);
