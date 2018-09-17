@@ -268,18 +268,54 @@ define([
             .appendTo(gist_editor)
             .addClass('form-horizontal');
 
-        $('<div/>')
+		// callbacks for execute Python script with kernel
+		window.executePython = function(python) {
+			return new Promise((resolve, reject) => {
+				var callbacks = {
+					iopub: {
+						output: (data) => resolve(data.content.text.trim())
+					}
+				};
+				Jupyter.notebook.kernel.execute(`${python}`, callbacks);
+			});
+		}
+
+		var cell = Jupyter.notebook.get_selected_cell();
+		var cm = Jupyter.notebook.get_selected_cell().code_mirror;
+
+		var div =
+		$('<div/>')
         .addClass('has-feedback')
         .show()
-        .appendTo(controls)
+        .appendTo(controls);
+		div
         .append(
             $('<p/>')
                 .text('This is on-line help for Virtual Teacher')
         )
         .append( '<p>Visit <a href="' + ct_host + 'help/" target="_blank">Virtual Teacher Help Center</a>!</p>' )
+
+		.append( '<h1>Current cell text</h1>' )
+        .append( '<pre>' + cell.get_text() + '</pre>' )
+        .append( '<hr>' )
         .append( '<strong>Related resources from our Virtual Teacher site:</strong>' )
         .append( $('<p/>').load( ct_host + 'help/resource/first.ipynb' ) )
-        .append( '<p>Or send your actual situation to us!</p>' )
+        .append( '<p>Or send your actual situation to us!</p>' );
+
+		function A(res )
+		{ //console.log(res);
+
+		  $('<div/>')
+		  .appendTo(controls)
+		  .append('<div class="col-sm-10"><hr><h1>This is result of execution of Python code</h1><pre>' + res + '</pre></div>' );
+		};
+
+		var code =
+		'for i in range(1,5):'+
+		'    print( i)';
+
+		window.executePython( code )
+			.then(result => A(result ));
 
         $('<div/>')
             .addClass('has-feedback')
