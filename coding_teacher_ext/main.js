@@ -281,7 +281,20 @@ define([
 		}
 
 		var cell = Jupyter.notebook.get_selected_cell();
-		var cm = Jupyter.notebook.get_selected_cell().code_mirror;
+		//var cm = Jupyter.notebook.get_selected_cell().code_mirror;
+		var cell_code = cell.get_text();
+		var cell_out = '';
+		
+		var cell_caption = '<h1>Current cell text</h1>' +
+					   '<pre>' + cell.get_text() + '</pre>';	
+					   
+		if (cell.cell_type == 'code' ) { 
+			cell_out = JSON.stringify( cell.output_area.toJSON() );
+			cell_caption = cell_caption +
+						   '<h1>Current cell output</h1>' +
+					       '<pre>' + cell_out + '</pre>'; };
+		
+        //.append( '<hr>' )
 
 		var div =
 		$('<div/>')
@@ -294,14 +307,17 @@ define([
                 .text('This is on-line help for Virtual Teacher')
         )
         .append( '<p>Visit <a href="' + ct_host + 'help/" target="_blank">Virtual Teacher Help Center</a>!</p>' )
-
-		.append( '<h1>Current cell text</h1>' )
-        .append( '<pre>' + cell.get_text() + '</pre>' )
-        .append( '<hr>' )
         .append( '<strong>Related resources from our Virtual Teacher site:</strong>' )
-        .append( $('<p/>').load( ct_host + 'help/resource/first.ipynb' ) )
-        .append( '<p>Or send your actual situation to us!</p>' );
+        //.append( $('<p/>').load( ct_host + 'help/resource/first.ipynb' ) )
+        .append( '<p>Or send your actual situation to us!</p>' )
+		//console.log( cell.output_area.toJSON() );
 
+		.append( cell_caption );
+
+		//console.log( cell.output_area.toJSON().toString() );
+		//console.log( cell.output_area.toJSON().toString );
+		//console.log( cell.output_area.toJSON().stream );
+		//console.log( JSON.stringify( cell.output_area.toJSON() ) );
 		function A(res )
 		{ //console.log(res);
 
