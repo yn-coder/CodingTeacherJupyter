@@ -6,9 +6,13 @@
  *
  */
 
+var curr_href = window.location.href;
 // Coding teacher host - with trail /
-//ct_host = 'http://127.0.0.1:5000/';
-ct_host = 'https://codingteacher.herokuapp.com/';
+// detect local run
+if ( curr_href.indexOf( 'http://localhost' ) !== -1 )
+{ ct_host = 'http://127.0.0.1:5000/'; }
+else
+{ ct_host = 'https://codingteacher.herokuapp.com/'; };
 
 define([
     'jquery',
