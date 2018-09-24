@@ -53,6 +53,8 @@ define([
         data: {
             file_name: Jupyter.notebook.notebook_path,
             description: 'I have a question',
+			cell_code : '',
+			cell_output : '',			
             public: false
         }
     };
@@ -104,7 +106,8 @@ define([
     function gist_success (response, textStatus, jqXHR) {
         // if (Jupyter.notebook.metadata.gist.id === response.id) return;
 
-        Jupyter.notebook.metadata.gist.id = response.id;
+        console.log(response);
+		Jupyter.notebook.metadata.gist.id = response.id;
         Jupyter.notebook.metadata._draft = $.extend(
             true, // deep copy
             Jupyter.notebook.metadata._draft, // defaults
@@ -122,8 +125,8 @@ define([
                     .attr('href', response.html_url)
                     .attr('target', '_blank')
                     .text(response.id)
-            );
-            //.append(msg_tail);
+            )
+            .append( response.msg );
         $('#gist_modal').find('.modal-body').append(alert);
         alert.slideDown('fast');
     }
@@ -318,20 +321,19 @@ define([
 		//console.log( cell.output_area.toJSON().toString );
 		//console.log( cell.output_area.toJSON().stream );
 		//console.log( JSON.stringify( cell.output_area.toJSON() ) );
-		function A(res )
-		{ //console.log(res);
+		
+		//function A(res )
+		//{ $('<div/>')
+		//  .appendTo(controls)
+		//  .append('<div class="col-sm-10"><hr><h1>This is result of execution of Python code</h1><pre>' + res + '</pre></div>' );
+		//};
 
-		  $('<div/>')
-		  .appendTo(controls)
-		  .append('<div class="col-sm-10"><hr><h1>This is result of execution of Python code</h1><pre>' + res + '</pre></div>' );
-		};
+		//var code =
+		//'for i in range(1,5):'+
+		//'    print( i)';
 
-		var code =
-		'for i in range(1,5):'+
-		'    print( i)';
-
-		window.executePython( code )
-			.then(result => A(result ));
+		//window.executePython( code )
+		//	.then(result => A(result ));
 
         $('<div/>')
             .addClass('has-feedback')
@@ -464,6 +466,8 @@ define([
                         var new_data = {
                             //public: $('#gist_public').prop('checked'),
                             description: $('#gist_description').val(),
+                            cell_code : 'print something',
+                            cell_output : 'some output',
                             file_name: $('#gist_file_name').val(),
                             file_url: window.location.href
                         };
@@ -519,6 +523,7 @@ define([
         var method = id ? 'PATCH' : 'POST';
 
         // Create/edit the Gist
+		// http://api.jquery.com/jquery.ajax/
         $.ajax({
             url: ct_host + 'help/post_new_q/',
             type: method,
