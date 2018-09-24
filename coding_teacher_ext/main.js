@@ -58,7 +58,7 @@ define([
             file_name: Jupyter.notebook.notebook_path,
             description: 'I have a question',
 			cell_code : '',
-			cell_output : '',			
+			cell_output : '',
             public: false
         }
     };
@@ -290,17 +290,20 @@ define([
 		var cell = Jupyter.notebook.get_selected_cell();
 		//var cm = Jupyter.notebook.get_selected_cell().code_mirror;
 		var cell_code = cell.get_text();
+		default_metadata.cell_code = cell_code;
 		var cell_out = '';
-		
+
 		var cell_caption = '<h1>Current cell text</h1>' +
-					   '<pre>' + cell.get_text() + '</pre>';	
-					   
-		if (cell.cell_type == 'code' ) { 
+					   '<pre>' + cell.get_text() + '</pre>';
+
+		default_metadata.cell_output = '';
+		if (cell.cell_type == 'code' ) {
 			cell_out = JSON.stringify( cell.output_area.toJSON() );
+			default_metadata.cell_output = cell_out;
 			cell_caption = cell_caption +
 						   '<h1>Current cell output</h1>' +
 					       '<pre>' + cell_out + '</pre>'; };
-		
+
         //.append( '<hr>' )
 
 		var div =
@@ -325,7 +328,7 @@ define([
 		//console.log( cell.output_area.toJSON().toString );
 		//console.log( cell.output_area.toJSON().stream );
 		//console.log( JSON.stringify( cell.output_area.toJSON() ) );
-		
+
 		//function A(res )
 		//{ $('<div/>')
 		//  .appendTo(controls)
@@ -470,8 +473,8 @@ define([
                         var new_data = {
                             //public: $('#gist_public').prop('checked'),
                             description: $('#gist_description').val(),
-                            cell_code : 'print something',
-                            cell_output : 'some output',
+                            cell_code : default_metadata.cell_code,
+                            cell_output : default_metadata.cell_output,
                             file_name: $('#gist_file_name').val(),
                             file_url: window.location.href
                         };
