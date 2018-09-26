@@ -130,7 +130,7 @@ define([
                     .attr('target', '_blank')
                     .text(response.id)
             )
-            .append( response.msg );
+            .append( '<br>' + response.msg );
         $('#gist_modal').find('.modal-body').append(alert);
         alert.slideDown('fast');
     }
