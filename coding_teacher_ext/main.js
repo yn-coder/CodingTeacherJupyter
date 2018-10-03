@@ -293,7 +293,22 @@ define([
 		default_metadata.cell_code = cell_code;
 		var cell_out = '';
 
-		var cell_caption = '<h1>Current cell text</h1>' +
+		var kommunicate_chat = `<script type="text/javascript">
+    (function(d, m){
+      var o = {"appId":"205ca3782d79941735839d35d84a4c774","conversationTitle":"Yuri","email":"", "openConversationOnNewMessage":true };
+      var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
+      s.src = "https://api.kommunicate.io/kommunicate.app";
+      var h = document.getElementsByTagName("head")[0]; h.appendChild(s);
+
+      window.kommunicate = m; m._globals = o;
+
+
+    })(document, window.kommunicate || {});
+
+</script>`;
+        var click_function_text = 'Kommunicate.launchConversation(); Kommunicate.sendMessage({ \&quot;message\&quot;: \&quot;I need some help with my code\&quot;, })';
+        var cell_caption = kommunicate_chat + '<h1>Current cell text</h1>' +
+        '<input id="clickMe" type="button" value="Chat" onclick="' + click_function_text + '" />' +
 					   '<pre>' + cell.get_text() + '</pre>';
 
 		default_metadata.cell_output = '';
