@@ -329,7 +329,7 @@ define([
         )
         .append( '<p>Visit <a href="' + ct_host + 'help/" target="_blank">Virtual Teacher Help Center</a>!</p>' )
         .append( '<strong>Related resources from our Virtual Teacher site:</strong>' )
-        //.append( $('<p/>').load( ct_host + 'help/resource/first.ipynb' ) )
+        .append( $('<p/>').load( ct_host + 'help/resource/first.ipynb' ) )
         .append( '<p>Or send your actual situation to us!</p>' )
 		//console.log( cell.output_area.toJSON() );
 
