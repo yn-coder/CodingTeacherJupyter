@@ -17,11 +17,13 @@ else
 define([
     'jquery',
     'base/js/namespace',
-    'base/js/dialog'
-], function (
+    'base/js/dialog',
+    'base/js/events'
+  ], function (
     $,
     Jupyter,
-    dialog
+    dialog,
+    events
 ) {
     "use strict";
 
@@ -554,7 +556,13 @@ define([
         });
     };
 
+    function fy_output(event, type, value,){
+    var link_message = '<p>Visit <a href="' + ct_host + 'help/" target="_blank">Virtual Teacher Help Center</a>!</p>';
+    type.output_area.selector.find('.output_subarea').append( link_message );
+  }
+
     function load_jupyter_extension () {
+        events.on("output_added.OutputArea", fy_output);
         return Jupyter.notebook.config.loaded.then(initialize);
     }
 
